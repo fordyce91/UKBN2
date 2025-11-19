@@ -52,6 +52,10 @@ $router->add('GET', '/login', function () {
     (new AuthController())->showLogin();
 });
 
+$router->add('GET', '/email/verify', function () {
+    (new AuthController())->verifyEmail();
+});
+
 $router->add('POST', '/login', function () {
     (new AuthController())->login();
 });
@@ -74,6 +78,14 @@ $router->add('GET', '/password/reset', function () {
 
 $router->add('POST', '/password/reset', function () {
     (new AuthController())->reset();
+});
+
+$router->add('POST', '/admin/promotions', function () {
+    (new AdminController())->createPromotion();
+});
+
+$router->add('POST', '/admin/newsletters', function () {
+    (new AdminController())->sendNewsletter();
 });
 
 $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
