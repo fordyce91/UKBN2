@@ -9,7 +9,7 @@ class MemberController extends Controller
 {
     public function promotions(): void
     {
-        $this->requireAuth();
+        $this->requireVerified(['member', 'admin']);
         $promotions = Promotion::active();
         $this->render('member/promotions', ['promotions' => $promotions, 'title' => 'Member Promotions']);
     }
