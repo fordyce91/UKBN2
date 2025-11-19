@@ -1,0 +1,13 @@
+{
+  "name": "ukbn2/app",
+  "description": "Lightweight PHP application with Tailwind UI",
+  "type": "project",
+  "require": {
+    "php": "^8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  }
+}
