@@ -32,10 +32,17 @@ class ErrorHandler
         ]);
 
         http_response_code(500);
-        $message = $env === 'production' ? 'Something went wrong. Please try again later.' : $exception->getMessage();
+        $message = trim($exception->getMessage()) ?: 'Something went wrong. Please try again later.';
         echo View::render('errors/500', [
             'title' => 'Server Error',
             'message' => $message,
+            'requestId' => Request::instance()->id(),
+            'details' => $env === 'production' ? null : [
+                'type' => get_class($exception),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'trace' => $exception->getTraceAsString(),
+            ],
         ]);
     }
 
