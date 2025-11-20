@@ -21,7 +21,12 @@ class Router
         }
 
         http_response_code(404);
-        echo 'Not Found';
+        Logger::get()->notice('Route not found', ['method' => $method, 'path' => $path]);
+        echo View::render('errors/404', [
+            'title' => 'Not Found',
+            'path' => $path,
+        ]);
+
         return null;
     }
 }

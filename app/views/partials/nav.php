@@ -9,9 +9,9 @@
         </div>
         <div class="flex items-center gap-3 text-sm text-slate-700">
             <?php if (Session::get('user')): ?>
-                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-800">Hi, <?= htmlspecialchars(Session::get('user')['name'], ENT_QUOTES, 'UTF-8'); ?></span>
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-800">Hi, <?= e(Session::get('user')['name']); ?></span>
                 <form method="POST" action="/logout" class="m-0">
-                    <input type="hidden" name="_token" value="<?= htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
+                    <input type="hidden" name="_token" value="<?= e($csrfToken); ?>">
                     <button class="rounded-md bg-red-500 px-3 py-1 text-white shadow hover:bg-red-600" type="submit">Logout</button>
                 </form>
             <?php else: ?>
