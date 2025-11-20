@@ -8,6 +8,8 @@ use ErrorException;
 
 class ErrorHandler
 {
+    private static bool $loggingFailed = false;
+
     public static function register(string $env): void
     {
         set_error_handler(static fn ($severity, $message, $file, $line) => self::handleError($severity, $message, $file, $line));
@@ -22,14 +24,21 @@ class ErrorHandler
 
     private static function handleException(\Throwable $exception, string $env): void
     {
-        Logger::get()->error($exception->getMessage(), [
-            'exception' => [
-                'type' => get_class($exception),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                'trace' => $env === 'production' ? null : $exception->getTraceAsString(),
-            ],
-        ]);
+        if (!self::$loggingFailed) {
+            try {
+                Logger::get()->error($exception->getMessage(), [
+                    'exception' => [
+                        'type' => get_class($exception),
+                        'file' => $exception->getFile(),
+                        'line' => $exception->getLine(),
+                        'trace' => $env === 'production' ? null : $exception->getTraceAsString(),
+                    ],
+                ]);
+            } catch (\Throwable $loggingException) {
+                self::$loggingFailed = true;
+                @error_log('Logging failed: ' . $loggingException->getMessage());
+            }
+        }
 
         http_response_code(500);
         $message = $env === 'production' ? 'Something went wrong. Please try again later.' : $exception->getMessage();
