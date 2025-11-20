@@ -9,6 +9,11 @@ use App\Services\Router;
 use App\Services\Session;
 use App\Services\View;
 
+// Show all errors to aid debugging during development
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 $composerAutoload = __DIR__ . '/../vendor/autoload.php';
 if (file_exists($composerAutoload)) {
     require $composerAutoload;
