@@ -23,9 +23,23 @@ if (file_exists($composerAutoload)) {
         $baseDir = __DIR__ . '/../app/';
         if (str_starts_with($class, $prefix)) {
             $relative = substr($class, strlen($prefix));
-            $file = $baseDir . str_replace('\\', '/', $relative) . '.php';
+            $relativePath = str_replace('\\', '/', $relative) . '.php';
+
+            // Primary PSR-4 path (case sensitive)
+            $file = $baseDir . $relativePath;
             if (file_exists($file)) {
                 require $file;
+                return;
+            }
+
+            // Fallback for lower-case directory structure (Controllers, Services, etc.)
+            $parts = explode('/', $relativePath);
+            $fileName = array_pop($parts);
+            $lowerDir = strtolower(implode('/', $parts));
+            $fallback = $baseDir . ($lowerDir ? $lowerDir . '/' : '') . $fileName;
+
+            if (file_exists($fallback)) {
+                require $fallback;
             }
         }
     });
